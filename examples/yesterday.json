@@ -1,0 +1,5 @@
+[
+  {"sku": "A1", "title": "Widget", "price": 10, "in_stock": true, "_scraped_at": "2026-08-20"},
+  {"sku": "B2", "title": "Gadget", "price": 20, "in_stock": true, "_scraped_at": "2026-08-20"},
+  {"sku": "D4", "title": "Doohickey", "price": 8, "in_stock": true, "_scraped_at": "2026-08-20"}
+]

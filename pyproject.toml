@@ -5,19 +5,44 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "crawlsync"
 version = "0.1.0"
-description = "Semantic diff for web crawl datasets — added, removed, field-level changes"
+description = "Semantic diff for web crawl datasets: added, removed, and field-level changes"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
+authors = [{ name = "pandeyvishwas51-oss" }]
+keywords = [
+    "crawl",
+    "diff",
+    "web-scraping",
+    "sku",
+    "catalog",
+    "ecommerce",
+    "price-monitoring",
+    "change-detection",
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0.0"]
 
+[project.urls]
+Homepage = "https://github.com/pandeyvishwas51-oss/crawlsync"
+Issues = "https://github.com/pandeyvishwas51-oss/crawlsync/issues"
+
+[project.scripts]
+crawlsync = "crawlsync.cli:main"
+
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["src*"]
+where = ["src"]
 
 [tool.pytest.ini_options]
-pythonpath = ["."]
+pythonpath = ["src"]
 testpaths = ["tests"]
