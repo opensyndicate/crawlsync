@@ -27,8 +27,30 @@ def _demo_payload() -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
 
 
 def _load_records(path: str) -> List[dict[str, Any]]:
-    with open(path, encoding="utf-8") as fh:
-        data = json.load(fh)
+    try:
+        with open(path, encoding="utf-8-sig") as fh:
+            raw = fh.read()
+    except FileNotFoundError:
+        raise SystemExit(f"{path}: file not found") from None
+    except IsADirectoryError:
+        raise SystemExit(f"{path}: is a directory") from None
+    except PermissionError:
+        raise SystemExit(f"{path}: permission denied") from None
+    except OSError as exc:
+        raise SystemExit(f"{path}: {exc.strerror or exc}") from None
+    except UnicodeDecodeError:
+        raise SystemExit(f"{path}: not valid UTF-8") from None
+
+    if raw.strip() == "":
+        raise SystemExit(f"{path}: expected a JSON array of objects, got an empty file")
+
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise SystemExit(
+            f"{path}: invalid JSON: {exc.msg} (line {exc.lineno} column {exc.colno})"
+        ) from None
+
     if not isinstance(data, list):
         raise SystemExit(f"{path}: expected a JSON array of objects, got {type(data).__name__}")
     for i, row in enumerate(data):
@@ -38,10 +60,14 @@ def _load_records(path: str) -> List[dict[str, Any]]:
 
 
 def _split_fields(raw: Optional[str]) -> Optional[List[str]]:
+    """Parse a comma-separated field list.
+
+    ``None`` means the caller omitted the flag (use library defaults).
+    An empty string or only commas means an empty list (no fields).
+    """
     if raw is None:
         return None
-    fields = [part.strip() for part in raw.split(",") if part.strip()]
-    return fields or None
+    return [part.strip() for part in raw.split(",") if part.strip()]
 
 
 def main(argv: Optional[List[str]] = None) -> int:
